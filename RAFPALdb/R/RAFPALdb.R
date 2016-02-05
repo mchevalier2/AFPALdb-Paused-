@@ -8,8 +8,8 @@
 #' cat_function()
 
 test_fct=function(){
-    library(RMySQL)
-    library(rjson)
+    #library(RMySQL)
+    #library(rjson)
     
     con=dbConnect(MySQL(), "AFPALdb","Manuu","cgkrggjn")
     
