@@ -2,7 +2,7 @@ Package: RAFPALdb
 Title: What the Package Does (one line, title case)
 Version: 0.0.0.9000
 Authors@R: person("Manuel", "Chevalier", email = "chevalier.manuel@gmail.com", role = c("aut", "cre"))
-Description: Package dedicated to the interact with and extract from data stored in AFAPLdb.
+Description: Package dedicated to the interaction with and extraction of data stored in AFAPLdb.
 Depends:
     R (>= 3.2.2)
 License: What license is it under?
