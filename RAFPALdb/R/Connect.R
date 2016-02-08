@@ -10,7 +10,7 @@
 #' con=Connect(user="root",pass="root")
 
 Connect=function(user,pass=-1,host="localhost"){
-    if(pass==-1) pass=get_password()
+    if(pass==-1) pass=.get_password()
     assign("AFPALdb",RMySQL::dbConnect(RMySQL::MySQL(), dbname="AFPALdb",user=user,password=pass,host=host),envir=.GlobalEnv)
 }
 
@@ -32,7 +32,7 @@ forceConnect=function(user=-1,pass=-1,host=-1){
     user=readline()
     cat("    Host: ")
     host=readline()
-    pass=get_password()
+    pass=.get_password()
     cat("    ----------------------------------\n\n")
     assign("AFPALdb",RMySQL::dbConnect(RMySQL::MySQL(), dbname="AFPALdb",user=user,password=pass,host=host),envir=.GlobalEnv)
 }

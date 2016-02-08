@@ -7,7 +7,7 @@
 #' pass=get_password()
 
 
-get_password <- function() {
+.get_password <- function() {
     cat("    Password: ")
     system("stty -echo")
     a <- readline()

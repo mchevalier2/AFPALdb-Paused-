@@ -43,11 +43,24 @@ getDatasetList=function(){
 #' @keywords getChronologyList
 #' @export
 #' @examples
-#' dataset=getChronologyList()
+#' chronology=getChronologyList()
 
 getChronologyList=function(){
     if(!exists("AFPALdb")) forceConnect()
     return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, "select Chrono_ID, Citation_Key, Site_Name, Chrono_Name, Model, Digitized from Chronology")))
+}
+
+#' Get the C14 table.
+#'
+#' This function allows you to get all the entries from the AFPALdb.C14 table.
+#' @keywords getC14List
+#' @export
+#' @examples
+#' C14=getC14List()
+
+getC14List=function(){
+    if(!exists("AFPALdb")) forceConnect()
+    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, "select * from C14")))
 }
 
 #' Get the ChronoData table.
@@ -69,9 +82,35 @@ getChronoDataList=function(){
 #' @keywords getChronoC14List
 #' @export
 #' @examples
-#' chronodata=getChronoC14List()
+#' chronoc14=getChronoC14List()
 
 getChronoC14List=function(){
     if(!exists("AFPALdb")) forceConnect()
     return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, "select * from ChronoC14")))
+}
+
+#' Get the RefSite table.
+#'
+#' This function allows you to get all the entries from the AFPALdb.RefSite table.
+#' @keywords getRefSiteList
+#' @export
+#' @examples
+#' refsite=getRefSiteList()
+
+getRefSiteList=function(){
+    if(!exists("AFPALdb")) forceConnect()
+    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, "select * from RefSite")))
+}
+
+#' Get the SiteRegion table.
+#'
+#' This function allows you to get all the entries from the AFPALdb.SiteRegion table.
+#' @keywords getSiteRegionList
+#' @export
+#' @examples
+#' siteregion=getSiteRegionList()
+
+getSiteRegionList=function(){
+    if(!exists("AFPALdb")) forceConnect()
+    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, "select * from SiteRegion")))
 }

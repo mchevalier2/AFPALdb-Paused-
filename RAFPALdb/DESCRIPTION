@@ -1,11 +1,11 @@
 Package: RAFPALdb
-Title: What the Package Does (one line, title case)
+Title: R-AFPALdb package.
 Version: 0.0.0.9000
 Authors@R: person("Manuel", "Chevalier", email = "chevalier.manuel@gmail.com", role = c("aut", "cre"))
 Description: Package dedicated to the interaction with and extraction of data stored in AFAPLdb.
 Depends:
     R (>= 3.2.2)
-License: What license is it under?
+License: "Use it at your own risk" license.
 LazyData: true
 RoxygenNote: 5.0.1.9000
 Imports:
