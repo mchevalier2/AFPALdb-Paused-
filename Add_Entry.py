@@ -1,4 +1,4 @@
-import sys,subprocess,os,warnings,json,numpy,time
+import sys,subprocess,warnings,json,numpy,time,shutil,os
 import MySQLdb
 import openpyxl
 
@@ -15,7 +15,6 @@ if len(sys.argv) == 1:
     exit(1)
 else:
     list_files=sys.argv[1:]
-
 
 ## Neat little functions    
 # Make sure to insert 'NULL' values when fields are empty
@@ -94,7 +93,9 @@ for f in list_files:
     print "c"*(getTerminalSize()[0])
     print "c %s"%f
 
-    wb=openpyxl.load_workbook(f,keep_vba=True)
+    wb=openpyxl.load_workbook(f,keep_vba=True,data_only=True)
+
+    CONTINUE=0
 
     # ----------------------------------------------------------------------------
     # Make Reference, Site, SiteRegion, RefSite
@@ -113,12 +114,12 @@ for f in list_files:
     CITATION_KEY=Insert_NULL(sheet.rows[debut+10][1].value)
     SITE_NAME=Insert_NULL(sheet.rows[debut][1].value)
  
-    siteSQL="INSERT INTO Site (Site_Name, Group_Name, lon, lat, Archive, Country, Altitude, Terrestrial) VALUES ("+SITE_NAME+","+Insert_NULL(sheet.rows[debut+1][1].value)+","+Insert_NULL(sheet.rows[debut+2][1].value)+","+Insert_NULL(sheet.rows[debut+3][1].value)+","+Insert_NULL(sheet.rows[debut+4][1].value)+","+Insert_NULL(sheet.rows[debut+6][1].value)+","+Insert_NULL(sheet.rows[debut+7][1].value)+","+Insert_NULL(sheet.rows[debut+8][1].value)+");"
+    siteSQL="INSERT INTO Site (Record_Name, Site_Name, lon, lat, Archive, Country, Altitude, Terrestrial) VALUES ("+SITE_NAME+","+Insert_NULL(sheet.rows[debut+1][1].value)+","+Insert_NULL(sheet.rows[debut+2][1].value)+","+Insert_NULL(sheet.rows[debut+3][1].value)+","+Insert_NULL(sheet.rows[debut+4][1].value)+","+Insert_NULL(sheet.rows[debut+6][1].value)+","+Insert_NULL(sheet.rows[debut+7][1].value)+","+Insert_NULL(sheet.rows[debut+8][1].value)+");"
 
     referenceSQL="INSERT INTO Reference (Citation_Key, Authors, Published, Journal, Year, Volume, Issue, Pages, Title, DOI) VALUES ("+CITATION_KEY+","+Insert_NULL(sheet.rows[debut+11][1].value)+","+Insert_NULL(sheet.rows[debut+12][1].value)+","+Insert_NULL(sheet.rows[debut+13][1].value)+","+Insert_NULL(sheet.rows[debut+14][1].value)+","+Insert_NULL(sheet.rows[debut+15][1].value)+","+Insert_NULL(sheet.rows[debut+16][1].value)+","+Insert_NULL(sheet.rows[debut+17][1].value)+","+Insert_NULL(sheet.rows[debut+18][1].value)+","+Insert_NULL(sheet.rows[debut+19][1].value)+");"
 
     SITEREGION=False
-    SiteRegionSQL="INSERT INTO SiteRegion (Site_Name, Region) VALUES "
+    SiteRegionSQL="INSERT INTO SiteRegion (Record_Name, Region) VALUES "
     REGIONS=[y for y in [x.value for x in sheet.rows[debut+5][1:]] if y != None]
     for region in REGIONS:
         SITEREGION=True
@@ -126,31 +127,39 @@ for f in list_files:
     SiteRegionSQL=SiteRegionSQL[:-1]+";"
 
     REFSITE=True
-    RefSiteSQL="INSERT INTO RefSite (Citation_Key, Site_Name) VALUES (%s,%s),"%(CITATION_KEY,SITE_NAME)
+    RefSiteSQL="INSERT INTO RefSite (Citation_Key, Record_Name) VALUES (%s,%s),"%(CITATION_KEY,SITE_NAME)
     if sheet.rows[debut+9][1].value:
         REGIONS=[y for y in [x.value for x in sheet.rows[debut+9][2:]] if y != None]
         for region in REGIONS:
-            RefSiteSQL+="(%s,%s),"%(CITATION_KEY,Insert_NULL(region))
+            nrow=DB_CURSOR.execute("select Record_Name from Site where Record_Name='%s'"%region)
+            if nrow>0:
+                RefSiteSQL+="(%s,%s),"%(CITATION_KEY,Insert_NULL(region))
+            else:
+                print "c\nc " + bcolors.FAIL + bcolors.BOLD + "Script aborded. The Additional Site referenced as '%s' does not exist in the database. The database was not updated."%region + bcolors.ENDC
+                CONTINUE=999
+                break
     RefSiteSQL=RefSiteSQL[:-1]+";"
 
     # ----------------------------------------------------------------------------
-    # Make C14
-    C14=True
+    # Make Age
+    AGE=True
+    Agelist=[]
     try:
-        sheet=wb['C14']
+        sheet=wb['Ages']
         debut=0
         while sheet.rows[debut][0].value != "## Data":
             debut+=1
         debut+=2   
         if debut < len(sheet.rows)-1:
-            C14SQL="INSERT INTO C14 (LabCode, Site_Name, Citation_Key, Age, Error, Depth, Year, Material) VALUES "
+            AgeSQL="INSERT INTO Age (LabCode, Record_Name, Citation_Key, Type, Age, Reservoir, Error, Depth, Year, Material) VALUES "
             for i in range(debut,len(sheet.rows)):
-                C14SQL+="("+Insert_NULL(sheet.rows[i][0].value)+","+SITE_NAME+","+CITATION_KEY+","+Insert_NULL(sheet.rows[i][1].value)+","+Insert_NULL(sheet.rows[i][2].value)+","+Insert_NULL(sheet.rows[i][3].value)+","+Insert_NULL(sheet.rows[i][4].value)+","+Insert_NULL(sheet.rows[i][5].value)+"),"
-            C14SQL=C14SQL[:-1]+";"
+                AgeSQL+="("+Insert_NULL(sheet.rows[i][0].value)+","+SITE_NAME+","+CITATION_KEY+","+Insert_NULL(sheet.rows[i][1].value)+","+Insert_NULL(sheet.rows[i][2].value)+","+Insert_NULL(sheet.rows[i][3].value)+","+Insert_NULL(sheet.rows[i][4].value)+","+Insert_NULL(sheet.rows[i][5].value)+","+Insert_NULL(sheet.rows[i][6].value)+","+Insert_NULL(sheet.rows[i][7].value)+"),"
+                Agelist.append(sheet.rows[i][0].value)
+            AgeSQL=AgeSQL[:-1]+";"
         else:
-            C14=False
+            AGE=False
     except:
-        C14=False
+        AGE=False
 
 
     # ----------------------------------------------------------------------------
@@ -159,7 +168,7 @@ for f in list_files:
     chronosheets=[y for y,e in enumerate([x.find("Chrono") for x in wb.get_sheet_names()]) if e==0]
     DataSQL=[]
     ChronoSQL=[]
-    ChronoC14SQL=[]
+    ChronoAgeSQL=[]
     
     DATASET_ID=getIdDataset()
     dataset_id={}
@@ -168,26 +177,31 @@ for f in list_files:
 
     DATASET=True
     CHRONOLOGY=True
-    CHRONOC14=True
+    CHRONOAGE=True
     
     if len(datasheets) == 0:
         DATASET=False
     if len(chronosheets) == 0:
         CHRONOLOGY=False
-        CHRONOC14=False
-        
+        CHRONOAGE=False
+
+    OLDCHRONO=[]
     for i in range(len(datasheets)):
         PROXY_NAME=wb.get_sheet_names()[datasheets[i]][5:]
         dataset_id[DATASET_ID]=[]
+        OLDCHRONO.append([])
         sheet=wb[wb.get_sheet_names()[datasheets[i]]]
         debut=0
         while sheet.rows[debut][0].value != "## Data":
             debut+=1
-        debut+=4
+        debut+=5
         if debut < len(sheet.rows)-1:
-            DataSQL.append("INSERT INTO Dataset (Dataset_ID, Site_Name, Citation_Key, Proxy, Digitized, Dataset, Uncertainties) VALUES ")
+            DataSQL.append("INSERT INTO Dataset (Dataset_ID, Record_Name, Citation_Key, Proxy, Digitized, Dataset, Uncertainties) VALUES ")
             NCOLS=sum([y != None for y in [x.value for x in sheet.rows[debut][1:]]])+1
-            NCHRONO=[str(y) for y in [x.value for x in sheet.rows[debut-3][1:]] if y != None ]
+            OLDCHRONO[i]=[str(y) for y in [x.value for x in sheet.rows[debut-3][1:]] if y != None ]
+            NCHRONO=[str(y) for y in [x.value for x in sheet.rows[debut-4][1:]] if y != None ]
+            NCHRONO+=OLDCHRONO[i]
+
             if sheet.rows[debut-2][1].value=='Independent Entries':
                 for j in range(1,NCOLS):
                     PROXY=[x[j].value for x in sheet.rows[debut:]]
@@ -222,22 +236,43 @@ for f in list_files:
                 DATASET_ID+=1
         else:
             DATASET=False
-            
+
     for i in range(len(chronosheets)):
         CHRONO_NAME=wb.get_sheet_names()[chronosheets[i]][7:]
         chronology_id[CHRONO_NAME]=CHRONOLOGY_ID
+
         sheet=wb[wb.get_sheet_names()[chronosheets[i]]]
         debut=0
         while sheet.rows[debut][0].value != "## Data":
             debut+=1
-        debut+=4
+        debut+=5
         if debut < len(sheet.rows)-1:
-            ChronoSQL.append("INSERT INTO Chronology (Chrono_ID, Citation_Key, Site_Name, Chrono_Name, Model, Digitized, Sample, Depth, Chronology, Uncertainties) VALUES ")
-            ChronoC14SQL.append("INSERT INTO ChronoC14 (Chrono_ID, LabCode) VALUES ")
+            ChronoSQL.append("INSERT INTO Chronology (Chrono_ID, Citation_Key, Record_Name, Chrono_Name, Model, Digitized, Sample, Depth, Chronology, Uncertainties) VALUES ")
+            ChronoAgeSQL.append("INSERT INTO ChronoAge (Chrono_ID, LabCode) VALUES ")
             NCOLS=sum([y != None for y in [x.value for x in sheet.rows[debut-3][1:]]])+1
-            for j in range(1,NCOLS):
-                ChronoC14SQL[-1]+="("+str(CHRONOLOGY_ID)+","+Insert_NULL(sheet.rows[debut-3][j].value)+"),"
-            ChronoC14SQL[-1]=ChronoC14SQL[-1][:-1]+";"
+            if NCOLS > 1:
+                for j in range(1,NCOLS):
+                    nrow=DB_CURSOR.execute("select * from Age where LabCode='%s'"%sheet.rows[debut-3][j].value)
+                    if nrow>0 or sheet.rows[debut-3][j].value in Agelist:
+                        ChronoAgeSQL[-1]+="("+str(CHRONOLOGY_ID)+","+Insert_NULL(sheet.rows[debut-3][j].value)+"),"
+                    else:
+                        print "c\nc " + bcolors.FAIL + bcolors.BOLD + "Script aborded. The Age date referenced as '%s' does not exist in the database. The database was not updated."%sheet.rows[debut-3][j].value + bcolors.ENDC
+                        CONTINUE=999
+                        break
+                ChronoAgeSQL[-1]=ChronoAgeSQL[-1][:-1]+";"
+            else:
+                CHRONOAGE=False
+
+            OLDDATASET=[str(y) for y in [x.value for x in sheet.rows[debut-4][1:]] if y != None ]
+            for j in OLDDATASET:
+                nrow=DB_CURSOR.execute("Select Dataset_ID from dataset where Citation_Key='%s' and Record_Name=%s and Proxy='%s'"%(j[1:-1].split(";")[0],SITE_NAME,j[1:-1].split(";")[1]))
+                if nrow>0:
+                    dataset_id[DB_CURSOR.fetchall()[-1][0]]=[CHRONO_NAME]
+                else:
+                    print "c\nc " + bcolors.FAIL + bcolors.BOLD + "Script aborded. The Dataset referenced as '%s' does not exist in the database for the current site %s. The database was not updated."%(j,SITE_NAME) + bcolors.ENDC
+                    CONTINUE=999
+                    break
+                    
             SAMPLE=[x[0].value for x in sheet.rows[debut:]]
             data={}
             data[SAMPLE[0]]=SAMPLE[1:]
@@ -259,49 +294,61 @@ for f in list_files:
             CHRONOLOGY_ID+=1
         else:
             CHRONOLOGY=False
-            CHRONOC14=False
-    
+            CHRONOAGE=False
+
+    if CONTINUE <999:
+        for i in sum(OLDCHRONO,[]):
+            nrow=DB_CURSOR.execute("Select Chrono_Id from Chronology where Citation_Key='%s' and Record_Name=%s and Chrono_Name='%s'"%(i[1:-1].split(";")[0],SITE_NAME,i[1:-1].split(";")[1]))
+            if nrow>0:
+                chronology_id[i]=DB_CURSOR.fetchall()[-1][0]
+            else:
+                print "c\nc " + bcolors.FAIL + bcolors.BOLD + "Script aborded. The Chronology referenced as '%s' does not exist in the database. The database was not updated."%i + bcolors.ENDC
+                CONTINUE=999
+                break
+        
     # ----------------------------------------------------------------------------
     # Make ChronoData
 
-    CHRONODATA=True
-    if CHRONOLOGY and DATASET:
-        ChronoDataSQL="INSERT INTO ChronoData (Chrono_ID, Dataset_ID) VALUES "
-        for i in dataset_id.keys()[::-1]:
-            chrono_keys=chronology_id.keys()
-            for j in dataset_id[i]:
-                ChronoDataSQL+="("+str(chronology_id[j])+","+str(i)+"),"
-        ChronoDataSQL=ChronoDataSQL[:-1]+";"
-    else:
-        CHRONODATA=False
+    if CONTINUE <999:
+        CHRONODATA=True
+        if CHRONOLOGY and DATASET:
+            ChronoDataSQL="INSERT INTO ChronoData (Chrono_ID, Dataset_ID) VALUES "
+            for i in dataset_id.keys()[::-1]:
+                chrono_keys=chronology_id.keys()
+                for j in dataset_id[i]:
+                    ChronoDataSQL+="("+str(chronology_id[j])+","+str(i)+"),"
+            ChronoDataSQL=ChronoDataSQL[:-1]+";"
+        else:
+            CHRONODATA=False
     
 
     # ----------------------------------------------------------------------------
     # Sending data to the database
 
     DB_CURSOR.execute("START TRANSACTION;")
-    CONTINUE=0
-    try:
-        DB_CURSOR.execute(referenceSQL)
-        print "c\nc " + bcolors.OKGREEN + "Reference OK." + bcolors.ENDC
-    except:
-        print "c\nc "+ bcolors.FAIL +"/!\ Alert. Duplicated Primary Key '%s' in 'Reference'."%CITATION_KEY + bcolors.ENDC
-        xx=raw_input("c Should the new data be linked to the existing entry '%s'? [Y/N] "%CITATION_KEY )
-        while not (xx == "Y" or xx== "y" or xx == "N" or xx == "n"):
+    CONTINUE+=0
+    if CONTINUE < 1:
+        try:
+            DB_CURSOR.execute(referenceSQL)
+            print "c\nc " + bcolors.OKGREEN + "Reference OK." + bcolors.ENDC
+        except:
+            print "c\nc "+ bcolors.FAIL +"/!\ Alert. Duplicated Primary Key '%s' in 'Reference'."%CITATION_KEY + bcolors.ENDC
             xx=raw_input("c Should the new data be linked to the existing entry '%s'? [Y/N] "%CITATION_KEY )
-        print "c"
-        if xx =="N" or xx == "n":
-            print "c\nc " + bcolors.FAIL + bcolors.BOLD + "Script aborded. The database was not updated." + bcolors.ENDC
-            CONTINUE=999
-        CONTINUE+=1
-        REFSITE=False
+            while not (xx == "Y" or xx== "y" or xx == "N" or xx == "n"):
+                xx=raw_input("c Should the new data be linked to the existing entry '%s'? [Y/N] "%CITATION_KEY )
+            print "c"
+            if xx =="N" or xx == "n":
+                print "c\nc " + bcolors.FAIL + bcolors.BOLD + "Script aborded. The database was not updated." + bcolors.ENDC
+                CONTINUE=999
+            CONTINUE+=1
+            #REFSITE=False
         
     if CONTINUE <2:
         try:
             DB_CURSOR.execute(siteSQL)
             print "c " + bcolors.OKGREEN + "Site OK." + bcolors.ENDC
         except:
-            print "c\nc "+ bcolors.FAIL +"/!\ Alert. Duplicated Primary Key '%s' in 'Site'. Importation cancelled. Check the data."%SITE_NAME + bcolors.ENDC
+            print "c\nc "+ bcolors.FAIL +"/!\ Alert. Duplicated Primary Key '%s' in 'Site'."%SITE_NAME + bcolors.ENDC
             xx=raw_input("c Should the new data be linked to the existing entry '%s'? [Y/N] "%SITE_NAME)
             while not (xx == "Y" or xx== "y" or xx == "N" or xx == "n"):
                 xx=raw_input("c Should the new data be linked to the existing entry '%s'? [Y/N] "%SITE_NAME)
@@ -334,15 +381,16 @@ for f in list_files:
         else:
             print  "c "+ bcolors.WARNING +"/!\ Warning. No new SiteRegion entry without a new Site. (--> Update scripts)" + bcolors.ENDC
 
-        if C14:
+        if AGE:
+            print AgeSQL
             try:
-                DB_CURSOR.execute(C14SQL)
-                print "c " + bcolors.OKGREEN + "C14 OK." + bcolors.ENDC
+                DB_CURSOR.execute(AgeSQL)
+                print "c " + bcolors.OKGREEN + "Age OK." + bcolors.ENDC
             except:
-                print "c "+ bcolors.FAIL +"/!\ Alert. Duplicated Primary Key in 'C14'. Importation cancelled. Check the data." + bcolors.ENDC
+                print "c "+ bcolors.FAIL +"/!\ Alert. Duplicated Primary Key in 'Age'. Importation cancelled. Check the data." + bcolors.ENDC
                 COMMIT=False
         else:
-            print  "c "+ bcolors.WARNING +"/!\ Warning. No C14 dates associated with the file." + bcolors.ENDC
+            print  "c "+ bcolors.WARNING +"/!\ Warning. No new Ages associated with the file." + bcolors.ENDC
 
         if DATASET:
             try:
@@ -374,19 +422,24 @@ for f in list_files:
         else:
             print  "c "+ bcolors.WARNING +"/!\ Warning. No Chronology nor Dataset associated with the file." + bcolors.ENDC
 
-        if CHRONOC14:
+        if CHRONOAGE:
             try:
-                [DB_CURSOR.execute(x) for x in ChronoC14SQL]
-                print "c " + bcolors.OKGREEN + "ChronoC14 OK." + bcolors.ENDC
+                [DB_CURSOR.execute(x) for x in ChronoAgeSQL]
+                print "c " + bcolors.OKGREEN + "ChronoAge OK." + bcolors.ENDC
             except:
-                print "c "+ bcolors.FAIL +"/!\ Alert. Duplicated Primary Key in 'ChronoC14'. Importation cancelled. Check the data." + bcolors.ENDC
+                for x in ChronoAgeSQL:
+                    print x
+                print "c "+ bcolors.FAIL +"/!\ Alert. Duplicated Primary Key in 'ChronoAge'. Importation cancelled. Check the data." + bcolors.ENDC
                 COMMIT=False     
         else:
-            print  "c "+ bcolors.WARNING +"/!\ Warning. No Chronology associated with the file." + bcolors.ENDC
+            print  "c "+ bcolors.WARNING +"/!\ Warning. No Chronology associated with the file. No update for ChronoAge." + bcolors.ENDC
+            
         if COMMIT:
-            if CHRONOC14 and CHRONODATA and CHRONOLOGY and DATASET and C14 and SITEREGION and REFSITE:    
+            if CHRONOAGE and CHRONODATA and CHRONOLOGY and DATASET and AGE and SITEREGION and REFSITE:    
                 DB_CURSOR.execute("COMMIT;")
                 print "c\nc " + bcolors.OKGREEN + bcolors.BOLD + "Importation completed. No errors." + bcolors.ENDC
+                with open(os.path.abspath(sys.argv[0])[:-3]+"_log.txt", 'a') as file:
+                    file.write(os.path.abspath(f)+" ")
             else:
                 xx=raw_input("c\nc Warnings were raised. Should the database be updated?" + bcolors.ENDC+" [Y/N] ")
                 while not (xx == "Y" or xx== "y" or xx == "N" or xx == "n"):
@@ -394,10 +447,11 @@ for f in list_files:
                 if xx.upper() == "Y":
                     DB_CURSOR.execute("COMMIT;")
                     print "c\nc " + bcolors.OKGREEN + bcolors.BOLD + "Importation completed. No errors." + bcolors.ENDC
+                    with open(os.path.abspath(sys.argv[0])[:-3]+"_log.txt", 'a') as file:
+                        file.write(os.path.abspath(f)+" ")
                 else:
                     DB_CURSOR.execute("ROLLBACK;")
                     print "c\nc " + bcolors.FAIL + bcolors.BOLD + "Importation Stopped. The database was not updated." + bcolors.ENDC
-
         else:
             DB_CURSOR.execute("ROLLBACK;")
             print "c\nc " + bcolors.FAIL + bcolors.BOLD + "Importation failed. The database was not updated." + bcolors.ENDC
@@ -430,5 +484,7 @@ if xx =="Y" or xx == "y":
     xx=xx+DB_NAME
     print "c File saved as: %s"%xx
     os.system("/Users/chevalier/Workspace/AFPALdb/Backup/mysql2sqlite.sh -u Manuu -p AFPALdb | sqlite3 %s"%xx)
+    shutil.copy2('/Users/chevalier/Workspace/AFPALdb/Add_Entry_log.txt', '/Users/chevalier/Workspace/AFPALdb/Backup/%s_Entry_log.txt'%DB_NAME[:-8])
 print "c"*(getTerminalSize()[0])
+print ""
 

@@ -250,37 +250,37 @@ CREATE TABLE IF NOT EXISTS `encompte` (
 DROP TABLE IF EXISTS Site;
 CREATE TABLE IF NOT EXISTS `Site` (
   `Site_ID` int(10) NOT NULL AUTO_INCREMENT,
+  `Record_Name` varchar(30) NOT NULL,
   `Site_Name` varchar(30) NOT NULL,
-  `Group_Name` varchar(30) NOT NULL,
   `lon` double NULL,
   `lat` double NULL,
   `Archive` varchar(50) NOT NULL,
   `Country` varchar(100)  DEFAULT NULL,
   `Altitude` double  DEFAULT NULL,
   `Terrestrial` boolean NOT NULL,
-  PRIMARY KEY (`Site_Name`),
+  PRIMARY KEY (`Record_Name`),
   KEY `Sites_Index` (`Site_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS SiteRegion;
 CREATE TABLE IF NOT EXISTS `SiteRegion` (
-  `Site_Name` varchar(30) NOT NULL,
+  `Record_Name` varchar(30) NOT NULL,
   `Region` varchar(200)  NOT NULL,
-  PRIMARY KEY (`Site_Name`,`Region`),
-  KEY `SitesRegion_Index` (`Site_Name`,`Region`)
+  PRIMARY KEY (`Record_Name`,`Region`),
+  KEY `SitesRegion_Index` (`Record_Name`,`Region`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS Reference;
 CREATE TABLE IF NOT EXISTS `Reference` (
   `Citation_Key` varchar(70) NOT NULL,
-  `Authors` varchar(100) NOT NULL,
+  `Authors` varchar(300) NOT NULL,
   `Published` boolean NOT NULL,
   `Journal` varchar(100) DEFAULT NULL,
   `Year` int(4) DEFAULT NULL,
   `Volume` int(4) DEFAULT NULL,
-  `Issue` int(4) DEFAULT NULL,
+  `Issue` varchar(4) DEFAULT NULL,
   `Pages` varchar(20) DEFAULT NULL,
-  `Title` varchar(400) DEFAULT NULL,
+  `Title` varchar(600) DEFAULT NULL,
   `DOI` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`Citation_Key`),
   KEY `Reference_Index` (`Citation_Key`)
@@ -289,24 +289,24 @@ CREATE TABLE IF NOT EXISTS `Reference` (
 DROP TABLE IF EXISTS RefSite;
 CREATE TABLE IF NOT EXISTS `RefSite` (
   `Citation_Key` varchar(70) NOT NULL,
-  `Site_Name` varchar(30) NOT NULL,
-  PRIMARY KEY (`Citation_Key`,`Site_Name`),
-  KEY `RefSite_Index` (`Citation_Key`,`Site_Name`)
+  `Record_Name` varchar(30) NOT NULL,
+  PRIMARY KEY (`Citation_Key`,`Record_Name`),
+  KEY `RefSite_Index` (`Citation_Key`,`Record_Name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS Dataset;
 CREATE TABLE IF NOT EXISTS `Dataset` (
   `Dataset_ID`int(10)  NOT NULL,
-  `Site_Name` varchar(30) NOT NULL,
+  `Record_Name` varchar(30) NOT NULL,
   `Citation_Key` varchar(70) NOT NULL,
   `Proxy` varchar(50) NOT NULL,
   `Digitized` boolean NOT NULL,
   `dataset` JSON NULL,
   `Uncertainties` JSON NULL,
   `Metadata` JSON NULL,
-  PRIMARY KEY (`Site_Name`,`Citation_Key`,`Proxy`),
+  PRIMARY KEY (`Record_Name`,`Citation_Key`,`Proxy`),
   KEY `Dataset_Index` (`Dataset_ID`)
-  #FOREIGN KEY (`Site_Name`) REFERENCES Sites(`Site_Name`),
+  #FOREIGN KEY (`Record_Name`) REFERENCES Sites(`Record_Name`),
   #FOREIGN KEY (Citation_Key) REFERENCES Reference(Citation_Key)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -314,7 +314,7 @@ DROP TABLE IF EXISTS Chronology;
 CREATE TABLE IF NOT EXISTS `Chronology` (
   `Chrono_ID` int(10) NOT NULL,
   `Citation_Key` varchar(70) NOT NULL,
-  `Site_Name` varchar(30) NOT NULL,
+  `Record_Name` varchar(30) NOT NULL,
   `Chrono_Name` varchar(30) NOT NULL,
   `Model` varchar(30) NOT NULL,
   `Digitized` boolean NOT NULL,
@@ -323,10 +323,10 @@ CREATE TABLE IF NOT EXISTS `Chronology` (
   `Chronology` JSON NOT NULL,
   `Uncertainties` JSON NULL,
   `Metadata` JSON NULL,
-  PRIMARY KEY (`Site_Name`,`Citation_Key`,`Chrono_Name`),
+  PRIMARY KEY (`Record_Name`,`Citation_Key`,`Chrono_Name`),
   KEY `Chronology_Index` (`Chrono_ID`)
   #FOREIGN KEY (Citation_Key) REFERENCES Reference(Citation_Key),
-  #FOREIGN KEY (`Site_Name`) REFERENCES Sites(`Site_Name`)
+  #FOREIGN KEY (`Record_Name`) REFERENCES Sites(`Record_Name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 DROP TABLE IF EXISTS ChronoData;
@@ -339,29 +339,31 @@ CREATE TABLE IF NOT EXISTS `ChronoData` (
   #FOREIGN KEY (`Dataset_ID`) REFERENCES Dataset(`Dataset_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-DROP TABLE IF EXISTS ChronoC14;
-CREATE TABLE IF NOT EXISTS `ChronoC14` (
+DROP TABLE IF EXISTS ChronoAge;
+CREATE TABLE IF NOT EXISTS `ChronoAge` (
   `Chrono_ID` int(10) NOT NULL,
   `LabCode` varchar(20) NOT NULL,
   PRIMARY KEY (`Chrono_ID`,`LabCode`),
   KEY `ChronoData_Index` (`Chrono_ID`,`LabCode`)
   #FOREIGN KEY (`Chrono_ID`) REFERENCES Chronology(`Chrono_ID`),
-  #FOREIGN KEY (`LabCode`) REFERENCES C14(`LabCode`)
+  #FOREIGN KEY (`LabCode`) REFERENCES Age(`LabCode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-DROP TABLE IF EXISTS C14;
-CREATE TABLE IF NOT EXISTS `C14`(
+DROP TABLE IF EXISTS Age;
+CREATE TABLE IF NOT EXISTS `Age`(
   `LabCode` varchar(20) NOT NULL,
-  `Site_Name` varchar(30) NOT NULL,
+  `Record_Name` varchar(30) NOT NULL,
   `Citation_Key` varchar(70) NOT NULL,
+  `Type` varchar(70) NOT NULL,
   `Age` double NOT NULL,
+  `Reservoir` double NULL,
   `Error` double NOT NULL,
   `Depth` double NULL,
   `Year` int(4) DEFAULT NULL, # Annee de mesure
   `Material` varchar(50) NOT NULL, # Ce qui est analyse pour la frfr
   PRIMARY KEY (`LabCode`),
-  KEY `C14_Index` (`LabCode`)
-  #FOREIGN KEY (Site_Name) REFERENCES Sites(Site_Name),
+  KEY `Age_Index` (`LabCode`)
+  #FOREIGN KEY (Record_Name) REFERENCES Sites(Record_Name),
   #FOREIGN KEY (Citation_Key) REFERENCES Reference(Citation_Key)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

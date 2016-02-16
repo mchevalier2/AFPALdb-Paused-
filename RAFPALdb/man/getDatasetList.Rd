@@ -4,13 +4,18 @@
 \alias{getDatasetList}
 \title{Get the Dataset table.}
 \usage{
-getDatasetList()
+getDatasetList(ORDERBY = "Dataset_ID")
+}
+\arguments{
+\item{ORDERBY}{Set of variables (separated by a comma) to order the results by. Results sorted by 'Dataset_ID' by default.}
 }
 \description{
 This function allows you to get all the entries from the AFPALdb.Reference table, except the data.
 }
 \examples{
 dataset=getDatasetList()
+dataset=getDatasetList("Proxy")
+dataset=getDatasetList("Record_Name,Citation_Key")
 }
-\keyword{getDatasetList}
+\keyword{getTable}
 

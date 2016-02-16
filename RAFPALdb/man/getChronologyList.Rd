@@ -4,13 +4,17 @@
 \alias{getChronologyList}
 \title{Get the Chronology table.}
 \usage{
-getChronologyList()
+getChronologyList(ORDERBY = "Chrono_ID")
+}
+\arguments{
+\item{ORDERBY}{Set of variables (separated by a comma) to order the results by. Results sorted by 'Chrono_ID' by default.}
 }
 \description{
 This function allows you to get all the entries from the AFPALdb.Chronology table, except the data.
 }
 \examples{
 chronology=getChronologyList()
+chronology=getChronologyList("Record_Name")
 }
-\keyword{getChronologyList}
+\keyword{getTable}
 

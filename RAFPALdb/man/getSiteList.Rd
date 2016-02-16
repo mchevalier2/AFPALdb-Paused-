@@ -4,13 +4,18 @@
 \alias{getSiteList}
 \title{Get the Site table.}
 \usage{
-getSiteList()
+getSiteList(ORDERBY = "Site_Name")
+}
+\arguments{
+\item{ORDERBY}{Set of variables (separated by a comma) to order the results by. Results sorted by 'Site_Name' by default.}
 }
 \description{
 This function allows you to get all the entries from the AFPALdb.Site table.
 }
 \examples{
 sites=getSiteList()
+sites=getSiteList(ORDERBY="Site_ID")
+sites=getSiteList("Site_Name")
 }
-\keyword{getSiteList}
+\keyword{getTable}
 

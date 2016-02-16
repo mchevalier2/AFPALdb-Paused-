@@ -4,13 +4,17 @@
 \alias{getSiteRegionList}
 \title{Get the SiteRegion table.}
 \usage{
-getSiteRegionList()
+getSiteRegionList(ORDERBY = "Region_Name")
+}
+\arguments{
+\item{ORDERBY}{Set of variables (separated by a comma) to order the results by. Results sorted by 'Region_Name' by default.}
 }
 \description{
 This function allows you to get all the entries from the AFPALdb.SiteRegion table.
 }
 \examples{
 siteregion=getSiteRegionList()
+siteregion=getSiteRegionList("Region_Name")
 }
-\keyword{getSiteRegionList}
+\keyword{getTable}
 

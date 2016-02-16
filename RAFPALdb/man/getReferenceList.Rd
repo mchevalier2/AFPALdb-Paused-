@@ -4,13 +4,17 @@
 \alias{getReferenceList}
 \title{Get the Reference table.}
 \usage{
-getReferenceList()
+getReferenceList(ORDERBY = "Citation_Key")
+}
+\arguments{
+\item{ORDERBY}{Set of variables (separated by a comma) to order the results by. Results sorted by 'Citation_Key' by default.}
 }
 \description{
 This function allows you to get all the entries from the AFPALdb.Reference table.
 }
 \examples{
 ref=getReferenceList()
+ref=getReferenceList("Citation_Key")
 }
-\keyword{getReferenceList}
+\keyword{getTable}
 

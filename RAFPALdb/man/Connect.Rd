@@ -4,12 +4,12 @@
 \alias{Connect}
 \title{Connection to the database}
 \usage{
-Connect(user, pass = -1, host = "localhost")
+Connect(user = -1, pass = -1, host = -1)
 }
 \arguments{
 \item{user}{User.}
 
-\item{pass}{Password. Default triggers the prompt.}
+\item{pass}{Password.}
 
 \item{host}{Adresse of the server. Default 'localhost'.}
 }
@@ -17,7 +17,7 @@ Connect(user, pass = -1, host = "localhost")
 This function allows you to connect to AFPALdb.
 }
 \examples{
-con=Connect(user="root",pass="root")
+Connect(user="root",pass="root123")
 }
-\keyword{connect}
+\keyword{connection}
 

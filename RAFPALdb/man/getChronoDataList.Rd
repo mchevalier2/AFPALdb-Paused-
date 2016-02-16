@@ -4,13 +4,17 @@
 \alias{getChronoDataList}
 \title{Get the ChronoData table.}
 \usage{
-getChronoDataList()
+getChronoDataList(ORDERBY = "Chrono_ID,Dataset_ID")
+}
+\arguments{
+\item{ORDERBY}{Set of variables (separated by a comma) to order the results by. Results sorted by 'Chrono_ID x Dataset_ID' by default.}
 }
 \description{
 This function allows you to get all the entries from the AFPALdb.ChronoData table.
 }
 \examples{
 chronodata=getChronoDataList()
+chronodata=getChronoDataList("Dataset_ID")
 }
-\keyword{getChronoDataList}
+\keyword{getTable}
 
