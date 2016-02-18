@@ -15,7 +15,7 @@
     options(op)
     if(nrow(d)==0){
         cat("\nNo data associated with this request.\n  --> ",sql,"\n\n")
-        return(list(FALSE))
+        return(list(FALSE,NULL))
     }
     return(list(TRUE,d))
 }

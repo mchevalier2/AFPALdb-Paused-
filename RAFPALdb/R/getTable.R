@@ -10,8 +10,7 @@
 #' sites=getSiteList("Site_Name")
 
 getSiteList=function(ORDERBY="Site_Name"){
-    if(!exists("AFPALdb")) Connect()
-    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, paste("select * from Site",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep=""))))
+    return(.executeSQL(paste("select * from Site",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep="")))
 }
 
 #' Get the Reference table.
@@ -25,8 +24,7 @@ getSiteList=function(ORDERBY="Site_Name"){
 #' ref=getReferenceList("Citation_Key")
 
 getReferenceList=function(ORDERBY="Citation_Key"){
-    if(!exists("AFPALdb")) Connect()
-    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, paste("select * from Reference",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep=""))))
+    return(.executeSQL(paste("select * from Reference",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep="")))
 }
 
 #' Get the Dataset table.
@@ -41,8 +39,7 @@ getReferenceList=function(ORDERBY="Citation_Key"){
 #' dataset=getDatasetList("Record_Name,Citation_Key")
 
 getDatasetList=function(ORDERBY="Dataset_ID"){
-    if(!exists("AFPALdb")) Connect()
-    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, paste("select Dataset_ID, Site_Name, Citation_Key, Proxy, Digitized from Dataset",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep=""))))
+    return(.executeSQL(paste("select Dataset_ID, Site_Name, Citation_Key, Proxy, Digitized from Dataset",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep="")))
 }
 
 #' Get the Chronology table.
@@ -56,8 +53,7 @@ getDatasetList=function(ORDERBY="Dataset_ID"){
 #' chronology=getChronologyList("Record_Name")
 
 getChronologyList=function(ORDERBY="Chrono_ID"){
-    if(!exists("AFPALdb")) Connect()
-    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, paste("select Chrono_ID, Citation_Key, Site_Name, Chrono_Name, Model, Digitized from Chronology",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep=""))))
+    return(.executeSQL(paste("select Chrono_ID, Citation_Key, Site_Name, Chrono_Name, Model, Digitized from Chronology",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep="")))
 }
 
 #' Get the Age table.
@@ -71,8 +67,7 @@ getChronologyList=function(ORDERBY="Chrono_ID"){
 #' Age=getAgeList("LabCode")
 
 getAgeList=function(ORDERBY="LabCode"){
-    if(!exists("AFPALdb")) Connect()
-    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, paste("select * from Age",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep=""))))
+    return(.executeSQL(paste("select * from Age",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep="")))
 }
 
 #' Get the ChronoData table.
@@ -86,8 +81,7 @@ getAgeList=function(ORDERBY="LabCode"){
 #' chronodata=getChronoDataList("Dataset_ID")
 
 getChronoDataList=function(ORDERBY="Chrono_ID,Dataset_ID"){
-    if(!exists("AFPALdb")) Connect()
-    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, paste("select * from ChronoData",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep=""))))
+    return(.executeSQL(paste("select * from ChronoData",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep="")))
 }
 
 #' Get the ChronoC14 table.
@@ -101,8 +95,7 @@ getChronoDataList=function(ORDERBY="Chrono_ID,Dataset_ID"){
 #' chronocAge=getChronoAgeList("LabCode")
 
 getChronoAgeList=function(ORDERBY="Chrono_ID,LabCode"){
-    if(!exists("AFPALdb")) Connect()
-    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, paste("select * from ChronoAge",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep=""))))
+    return(.executeSQL(paste("select * from ChronoAge",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep="")))
 }
 
 #' Get the RefSite table.
@@ -116,23 +109,21 @@ getChronoAgeList=function(ORDERBY="Chrono_ID,LabCode"){
 #' refsite=getRefSiteList("Record_Name")
 
 getRefSiteList=function(ORDERBY="Citation_Key,Record_Name"){
-    if(!exists("AFPALdb")) Connect()
-    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, paste("select * from RefSite",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep=""))))
+    return(.executeSQL(paste("select * from RefSite",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep="")))
 }
 
 #' Get the SiteRegion table.
 #'
 #' This function allows you to get all the entries from the AFPALdb.SiteRegion table.
-#' @param ORDERBY Set of variables (separated by a comma) to order the results by. Results sorted by 'Region_Name' by default.
+#' @param ORDERBY Set of variables (separated by a comma) to order the results by. Results sorted by 'Region' by default.
 #' @keywords getTable
 #' @export
 #' @examples
 #' siteregion=getSiteRegionList()
-#' siteregion=getSiteRegionList("Region_Name")
+#' siteregion=getSiteRegionList("SRZ")
 
-getSiteRegionList=function(ORDERBY="Region_Name"){
-    if(!exists("AFPALdb")) Connect()
-    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, paste("select * from SiteRegion",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep=""))))
+getSiteRegionList=function(ORDERBY="Region"){
+    return(.executeSQL(paste("select * from SiteRegion",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep="")))
 }
 
 #' Get the Taxalist table.
@@ -144,8 +135,7 @@ getSiteRegionList=function(ORDERBY="Region_Name"){
 #' taxalist=getTaxalist()
 
 getTaxalist=function(){
-    if(!exists("AFPALdb")) Connect()
-    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, "select * from Taxalist")))
+    return(.executeSQL("select * from Taxalist"))
 }
 
 #' Get the distrib table.
@@ -157,8 +147,7 @@ getTaxalist=function(){
 #' distrib=getDistrib()
 
 getDistrib=function(){
-    if(!exists("AFPALdb")) Connect()
-    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, "select * from distrib")))
+    return(.executeSQL("select * from distrib"))
 }
 
 #' Get the Biome table.
@@ -170,8 +159,7 @@ getDistrib=function(){
 #' biome=getBiome()
 
 getBiome=function(){
-    if(!exists("AFPALdb")) Connect()
-    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, "select * from Biome")))
+    return(.executeSQL("select * from Biome"))
 }
 
 #' Get the Altitude table.
@@ -183,8 +171,7 @@ getBiome=function(){
 #' altitude=getAltitude()
 
 getAltitude=function(){
-    if(!exists("AFPALdb")) Connect()
-    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, "select * from Altitude")))
+    return(.executeSQL("select * from Altitude"))
 }
 
 #' Get the tmpr_min table.
@@ -196,8 +183,7 @@ getAltitude=function(){
 #' tmpr_min=getTmpr_min()
 
 getTmpr_min=function(){
-    if(!exists("AFPALdb")) Connect()
-    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, "select * from tmpr_min")))
+    return(.executeSQL("select * from tmpr_min"))
 }
 
 #' Get the tmpr_max table.
@@ -209,8 +195,7 @@ getTmpr_min=function(){
 #' tmpr_max=getTmpr_max()
 
 getTmpr_max=function(){
-    if(!exists("AFPALdb")) Connect()
-    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, "select * from tmpr_max")))
+    return(.executeSQL("select * from tmpr_max"))
 }
 
 #' Get the tmpr_mean table.
@@ -222,8 +207,7 @@ getTmpr_max=function(){
 #' tmpr_mean=getTmpr_mean()
 
 getTmpr_mean=function(){
-    if(!exists("AFPALdb")) Connect()
-    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, "select * from tmpr_mean")))
+    return(.executeSQL("select * from tmpr_mean"))
 }
 
 #' Get the PET table.
@@ -235,8 +219,7 @@ getTmpr_mean=function(){
 #' pet=getPET()
 
 getPET=function(){
-    if(!exists("AFPALdb")) Connect()
-    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, "select * from pet")))
+    return(.executeSQL("select * from pet"))
 }
 
 #' Get the precip table.
@@ -248,8 +231,7 @@ getPET=function(){
 #' precip=getPrecip()
 
 getPrecip=function(){
-    if(!exists("AFPALdb")) Connect()
-    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, "select * from precip")))
+    return(.executeSQL("select * from precip"))
 }
 
 #' Get the bio table.
@@ -261,6 +243,5 @@ getPrecip=function(){
 #' bio=getBio()
 
 getBio=function(){
-    if(!exists("AFPALdb")) Connect()
-    return(RMySQL::dbFetch(RMySQL::dbSendQuery(AFPALdb, "select * from bio")))
+    return(.executeSQL("select * from bio"))
 }
