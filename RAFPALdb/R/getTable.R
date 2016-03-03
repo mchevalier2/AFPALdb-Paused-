@@ -10,7 +10,7 @@
 #' sites=getSiteList("Site_Name")
 
 getSiteList=function(ORDERBY="Site_Name"){
-    return(.executeSQL(paste("select * from Site",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep="")))
+    return(.executeSQL(paste("select * from Site",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep=""))[[2]])
 }
 
 #' Get the Reference table.
@@ -24,7 +24,7 @@ getSiteList=function(ORDERBY="Site_Name"){
 #' ref=getReferenceList("Citation_Key")
 
 getReferenceList=function(ORDERBY="Citation_Key"){
-    return(.executeSQL(paste("select * from Reference",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep="")))
+    return(.executeSQL(paste("select * from Reference",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep=""))[[2]])
 }
 
 #' Get the Dataset table.
@@ -39,7 +39,7 @@ getReferenceList=function(ORDERBY="Citation_Key"){
 #' dataset=getDatasetList("Record_Name,Citation_Key")
 
 getDatasetList=function(ORDERBY="Dataset_ID"){
-    return(.executeSQL(paste("select Dataset_ID, Site_Name, Citation_Key, Proxy, Digitized from Dataset",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep="")))
+    return(.executeSQL(paste("select Dataset_ID, Site_Name, Citation_Key, Proxy, Digitized from Dataset",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep=""))[[2]])
 }
 
 #' Get the Chronology table.
@@ -53,7 +53,7 @@ getDatasetList=function(ORDERBY="Dataset_ID"){
 #' chronology=getChronologyList("Record_Name")
 
 getChronologyList=function(ORDERBY="Chrono_ID"){
-    return(.executeSQL(paste("select Chrono_ID, Citation_Key, Site_Name, Chrono_Name, Model, Digitized from Chronology",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep="")))
+    return(.executeSQL(paste("select Chrono_ID, Citation_Key, Site_Name, Chrono_Name, Model, Digitized from Chronology",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep=""))[[2]])
 }
 
 #' Get the Age table.
@@ -67,7 +67,7 @@ getChronologyList=function(ORDERBY="Chrono_ID"){
 #' Age=getAgeList("LabCode")
 
 getAgeList=function(ORDERBY="LabCode"){
-    return(.executeSQL(paste("select * from Age",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep="")))
+    return(.executeSQL(paste("select * from Age",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep=""))[[2]])
 }
 
 #' Get the ChronoData table.
@@ -81,7 +81,7 @@ getAgeList=function(ORDERBY="LabCode"){
 #' chronodata=getChronoDataList("Dataset_ID")
 
 getChronoDataList=function(ORDERBY="Chrono_ID,Dataset_ID"){
-    return(.executeSQL(paste("select * from ChronoData",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep="")))
+    return(.executeSQL(paste("select * from ChronoData",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep=""))[[2]])
 }
 
 #' Get the ChronoC14 table.
@@ -95,7 +95,7 @@ getChronoDataList=function(ORDERBY="Chrono_ID,Dataset_ID"){
 #' chronocAge=getChronoAgeList("LabCode")
 
 getChronoAgeList=function(ORDERBY="Chrono_ID,LabCode"){
-    return(.executeSQL(paste("select * from ChronoAge",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep="")))
+    return(.executeSQL(paste("select * from ChronoAge",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep=""))[[2]])
 }
 
 #' Get the RefSite table.
@@ -109,7 +109,7 @@ getChronoAgeList=function(ORDERBY="Chrono_ID,LabCode"){
 #' refsite=getRefSiteList("Record_Name")
 
 getRefSiteList=function(ORDERBY="Citation_Key,Record_Name"){
-    return(.executeSQL(paste("select * from RefSite",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep="")))
+    return(.executeSQL(paste("select * from RefSite",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep=""))[[2]])
 }
 
 #' Get the SiteRegion table.
@@ -123,7 +123,7 @@ getRefSiteList=function(ORDERBY="Citation_Key,Record_Name"){
 #' siteregion=getSiteRegionList("SRZ")
 
 getSiteRegionList=function(ORDERBY="Region"){
-    return(.executeSQL(paste("select * from SiteRegion",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep="")))
+    return(.executeSQL(paste("select * from SiteRegion",ifelse(ORDERBY=="","",paste(" ORDER BY",ORDERBY)),sep=""))[[2]])
 }
 
 #' Get the Taxalist table.
@@ -135,7 +135,7 @@ getSiteRegionList=function(ORDERBY="Region"){
 #' taxalist=getTaxalist()
 
 getTaxalist=function(){
-    return(.executeSQL("select * from Taxalist"))
+    return(.executeSQL("select * from Taxalist")[[2]])
 }
 
 #' Get the distrib table.
@@ -147,7 +147,7 @@ getTaxalist=function(){
 #' distrib=getDistrib()
 
 getDistrib=function(){
-    return(.executeSQL("select * from distrib"))
+    return(.executeSQL("select * from distrib")[[2]])
 }
 
 #' Get the Biome table.
@@ -159,7 +159,7 @@ getDistrib=function(){
 #' biome=getBiome()
 
 getBiome=function(){
-    return(.executeSQL("select * from Biome"))
+    return(.executeSQL("select * from Biome")[[2]])
 }
 
 #' Get the Altitude table.
@@ -171,7 +171,7 @@ getBiome=function(){
 #' altitude=getAltitude()
 
 getAltitude=function(){
-    return(.executeSQL("select * from Altitude"))
+    return(.executeSQL("select * from Altitude")[[2]])
 }
 
 #' Get the tmpr_min table.
@@ -183,7 +183,7 @@ getAltitude=function(){
 #' tmpr_min=getTmpr_min()
 
 getTmpr_min=function(){
-    return(.executeSQL("select * from tmpr_min"))
+    return(.executeSQL("select * from tmpr_min")[[2]])
 }
 
 #' Get the tmpr_max table.
@@ -195,7 +195,7 @@ getTmpr_min=function(){
 #' tmpr_max=getTmpr_max()
 
 getTmpr_max=function(){
-    return(.executeSQL("select * from tmpr_max"))
+    return(.executeSQL("select * from tmpr_max")[[2]])
 }
 
 #' Get the tmpr_mean table.
@@ -207,7 +207,7 @@ getTmpr_max=function(){
 #' tmpr_mean=getTmpr_mean()
 
 getTmpr_mean=function(){
-    return(.executeSQL("select * from tmpr_mean"))
+    return(.executeSQL("select * from tmpr_mean")[[2]])
 }
 
 #' Get the PET table.
@@ -219,7 +219,7 @@ getTmpr_mean=function(){
 #' pet=getPET()
 
 getPET=function(){
-    return(.executeSQL("select * from pet"))
+    return(.executeSQL("select * from pet")[[2]])
 }
 
 #' Get the precip table.
@@ -231,7 +231,7 @@ getPET=function(){
 #' precip=getPrecip()
 
 getPrecip=function(){
-    return(.executeSQL("select * from precip"))
+    return(.executeSQL("select * from precip")[[2]])
 }
 
 #' Get the bio table.
@@ -243,5 +243,5 @@ getPrecip=function(){
 #' bio=getBio()
 
 getBio=function(){
-    return(.executeSQL("select * from bio"))
+    return(.executeSQL("select * from bio")[[2]])
 }

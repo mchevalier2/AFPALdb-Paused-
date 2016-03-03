@@ -76,7 +76,7 @@ getData <- function(Site_Name="", Record_Name="", Citation_Key="", Proxy="", Pro
                                "Data"=list("Data"=.unpackJSON(d[i,"dataset"])),
                                "Chronology"=getChronoFromDataID(d[i,"Dataset_ID"], Chrono.Uncer))
                     }else{
-                        return(unpackJSON(d[,"dataset"]))
+                        return(.unpackJSON(d[,"dataset"]))
                     }
                 }
             }

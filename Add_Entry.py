@@ -150,7 +150,7 @@ for f in list_files:
         while sheet.rows[debut][0].value != "## Data":
             debut+=1
         debut+=2   
-        if debut < len(sheet.rows)-1:
+        if debut < len(sheet.rows):
             AgeSQL="INSERT INTO Age (LabCode, Record_Name, Citation_Key, Type, Age, Reservoir, Error, Depth, Year, Material) VALUES "
             for i in range(debut,len(sheet.rows)):
                 AgeSQL+="("+Insert_NULL(sheet.rows[i][0].value)+","+SITE_NAME+","+CITATION_KEY+","+Insert_NULL(sheet.rows[i][1].value)+","+Insert_NULL(sheet.rows[i][2].value)+","+Insert_NULL(sheet.rows[i][3].value)+","+Insert_NULL(sheet.rows[i][4].value)+","+Insert_NULL(sheet.rows[i][5].value)+","+Insert_NULL(sheet.rows[i][6].value)+","+Insert_NULL(sheet.rows[i][7].value)+"),"
@@ -256,7 +256,7 @@ for f in list_files:
                     if nrow>0 or sheet.rows[debut-3][j].value in Agelist:
                         ChronoAgeSQL[-1]+="("+str(CHRONOLOGY_ID)+","+Insert_NULL(sheet.rows[debut-3][j].value)+"),"
                     else:
-                        print "c\nc " + bcolors.FAIL + bcolors.BOLD + "Script aborded. The Age date referenced as '%s' does not exist in the database. The database was not updated."%sheet.rows[debut-3][j].value + bcolors.ENDC
+                        print "c\nc " + bcolors.FAIL + bcolors.BOLD + "Script aborded. The Age referenced as '%s' does not exist in the database. The database was not updated."%sheet.rows[debut-3][j].value + bcolors.ENDC
                         CONTINUE=999
                         break
                 ChronoAgeSQL[-1]=ChronoAgeSQL[-1][:-1]+";"
@@ -359,7 +359,7 @@ for f in list_files:
             CONTINUE+=1
             SITEREGION=False
 
-    if CONTINUE<2:
+    if CONTINUE<3:
         COMMIT=True
         if REFSITE:
             try:

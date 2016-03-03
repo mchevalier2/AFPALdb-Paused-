@@ -238,6 +238,24 @@ CREATE TABLE IF NOT EXISTS `encompte` (
   KEY `lo_la_bio_Index` (`POLTYPE`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+DROP TABLE IF EXISTS insolation;
+CREATE TABLE IF NOT EXISTS `insolation` (
+  `lat` double NOT NULL DEFAULT '0',
+  `jan` JSON NULL,
+  `feb` JSON NULL,
+  `mar` JSON DEFAULT NULL,
+  `apr` JSON DEFAULT NULL,
+  `may` JSON DEFAULT NULL,
+  `jun` JSON DEFAULT NULL,
+  `jul` JSON DEFAULT NULL,
+  `aug` JSON DEFAULT NULL,
+  `sep` JSON DEFAULT NULL,
+  `oct` JSON DEFAULT NULL,
+  `nov` JSON DEFAULT NULL,
+  `dcm` JSON DEFAULT NULL,
+  PRIMARY KEY (`lat`),
+  KEY `la_precip_Index` (`lat`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 
 # Former QDGC database
