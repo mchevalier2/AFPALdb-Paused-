@@ -30,6 +30,15 @@ openArticle <- function(Citation_Key="",Author=""){
     }
 }
 
+#' 
+#'
+#' This function allows you to open a PDF.
+#' @keywords file
+#' @keywords bg
+#' @export
+#' @examples
+
+
 
 
 .openPDF <- function(file, bg=TRUE) {
