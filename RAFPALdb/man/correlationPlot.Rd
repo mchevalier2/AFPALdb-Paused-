@@ -42,10 +42,9 @@ correlationPlot(x1, x2, xmn, xmx, xstep, ymn = 0, ymx = xmx, ystep,
 This figure measures the correlation between two records at different periods and with different time windows.
 }
 \examples{
-getDatasetFromReference("Chase_etal_2013")
 d1=getData(Citation_Key="Chase_etal_2013",Record_Name="SWP-1-1",Proxy.Uncer=FALSE,Chrono.Uncer=FALSE,Proxy="d15N") ; d1=cbind(d1$Chronology,d1$Data$Data)
 d2=getData(Citation_Key="Chase_etal_2013",Record_Name="SWP-1-1",Proxy.Uncer=FALSE,Chrono.Uncer=FALSE,Proxy="d13C") ; d2=cbind(d2$Chronology,d2$Data$Data)
 correlationPlot(d1,d2,3000,8000,100,ymn=0,ystep=100,Contour=TRUE)
 }
-\keyword{Correlation}
+\keyword{Plot}
 

@@ -15,7 +15,7 @@
 #' @param title Title to display on the graphic.
 #' @param xlab Label of the x-axis.
 #' @param ylab Label of the y-axis.
-#' @keywords Correlation
+#' @keywords Plot
 #' @export
 #' @examples
 #' d1=getData(Citation_Key="Chase_etal_2013",Record_Name="SWP-1-1",Proxy.Uncer=FALSE,Chrono.Uncer=FALSE,Proxy="d15N") ; d1=cbind(d1$Chronology,d1$Data$Data)
