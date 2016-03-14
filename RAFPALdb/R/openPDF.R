@@ -3,7 +3,7 @@
 #' Function that opens pdf files from a reference or an author.
 #' @param Citation_Key Key of the reference.
 #' @param Author Name of the author. Selection on the terminal possible if many references correspond to the name.
-#' @keywords openPDF
+#' @keywords pdf
 #' @export
 #' @examples
 #' openArticle("Baker_etal_2014")
@@ -30,15 +30,14 @@ openArticle <- function(Citation_Key="",Author=""){
     }
 }
 
-#' 
+#' This function allows you to open a PDF.
 #'
 #' This function allows you to open a PDF.
-#' @keywords file
-#' @keywords bg
+#' @param file Name of the file to open
+#' @param bg Open in background.
+#' @keywords pdf
 #' @export
 #' @examples
-
-
 
 
 .openPDF <- function(file, bg=TRUE) {

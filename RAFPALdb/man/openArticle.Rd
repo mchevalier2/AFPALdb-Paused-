@@ -18,5 +18,5 @@ Function that opens pdf files from a reference or an author.
 openArticle("Baker_etal_2014")
 openArticle(Author="Scott")
 }
-\keyword{openPDF}
+\keyword{pdf}
 
