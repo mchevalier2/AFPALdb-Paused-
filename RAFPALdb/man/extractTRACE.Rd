@@ -2,7 +2,7 @@
 % Please edit documentation in R/ExtractTRACE.R
 \name{extractTRACE}
 \alias{extractTRACE}
-\title{Open a TRACE file}
+\title{Extract data from TRACE.}
 \usage{
 extractTRACE(gridcells, var, month = 1, decadal = TRUE, layer = "",
   exportCSV = FALSE, saveCSV = paste(getwd(), "/Extract_", var, ".csv", sep
@@ -28,7 +28,7 @@ extractTRACE(gridcells, var, month = 1, decadal = TRUE, layer = "",
 \item{tmax}{Subset of the 22,000 years of simulation.}
 }
 \description{
-Open a TRACE file.
+Extract data from TRACE.
 }
 \examples{
 TS=extractTRACE(c(0,0,5,5),"TS",month=4:6,exportCSV=TRUE)

@@ -8,10 +8,9 @@
 #' @keywords TRaCE
 #' @export
 #' @examples
-#' TS=.openTRACE("TS",month=4,decadal=TRUE)
+#' TS=openTRACE("TS",month=4,decadal=TRUE)
 
-
-.openTRACE <- function(var,month=1,decadal=TRUE,layer=""){
+openTRACE <- function(var,month=1,decadal=TRUE,layer=""){
     month=c("01.jan","02.feb","03.mar","04.apr","05.may","06.jun","07.jul","08.aug","09.sep","10.oct","11.nov","12.dec")[month]
     if(var %in% c("MAT","MAP","AI")) month=""
     ncdf=nc_open(paste("/Users/chevalier/ISEM/Data/GCMs/TRACE21k/TRACE21Monthly/",var,ifelse(month=="","","."),month,ifelse(decadal,".10yrs.avg",""),".nc",sep=""))
@@ -32,7 +31,7 @@
 #' @keywords TRaCE
 #' @export
 #' @examples
-#' TS=.openTRACE("TS",month=4,decadal=TRUE)
+#' TS=openTRACE("TS",month=4,decadal=TRUE)
 #' .rotateTRACE(TS[,,1])
 
 .rotateTRACE <- function(dat){
@@ -44,19 +43,50 @@
 }
 
 
+#' Convert a set of coordinates into index to extract TRACE's data.
+#'
+#' Rotate a TRACE file to center the dataset on Greenwich. Only works with the full dataset!
+#' @param x Longitude of the point.
+#' @param y Latitude of the point.
+#' @keywords TRaCE
+#' @export
+#' @examples
+
 .cellFromXY <- function(x,y){ # Lon Lat
     if(x==180){return(.cellFromXY(179,y))}
     if(y==-90){return(.cellFromXY(x,-89))}
     return(c(x%/%3.75+49,(-y)%/%3.75+25)) # Col Ligne
 }
 
+
+#' Convert a set of index into the corresponding coordinates of the top left corner.
+#'
+#' Convert a set of index into the corresponding coordinates of the top left corner.
+#' @param i Index of the longitude.
+#' @param j Index of the latitude.
+#' @keywords TRaCE
+#' @export
+#' @examples
+
 .XYFromCell <- function(i,j){ # Ligne Col
-    return(c(90-(i-1)*3.75,(j-1)*3.75-180)) # Lat Lat
+    return(c(90-(i-1)*3.75,(j-1)*3.75-180)) # Lat Lon
 }
 
-.cutTRACE <- function(xmin,xmax,ymin,ymax,d){
-    XYmin=cellFromXY(xmin,ymin)
-    XYmax=cellFromXY(xmax,ymax)
 
-    return(d[XYmax[2]:XYmin[2],XYmin[1]:XYmax[1]])
+#' Cut a matrix of data from TRACE.
+#'
+#' Cut a matrix of data from TRACE.
+#' @param dat Matrix to cut.
+#' @param xmin Lower longitude.
+#' @param xmax Higher longitude.
+#' @param ymin Lower latitude.
+#' @param ymin Higher latitude.
+#' @keywords TRaCE
+#' @export
+#' @examples
+
+.cutTRACE <- function(dat,xmin,xmax,ymin,ymax){
+    XYmin=.cellFromXY(xmin,ymin)
+    XYmax=.cellFromXY(xmax,ymax)
+    return(dat[XYmax[2]:XYmin[2],XYmin[1]:XYmax[1]])
 }

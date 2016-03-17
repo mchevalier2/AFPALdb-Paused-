@@ -10,4 +10,9 @@ LazyData: true
 RoxygenNote: 5.0.1.9000
 Imports:
     RMySQL,
-    rjson
+    rjson,
+    sp,
+    ncdf4,
+    raster,
+    ade4,
+    maptools

@@ -9,7 +9,7 @@
 #' @examples
 #' Connect(user="root",pass="root123")
 
-Connect=function(user=-1,pass=-1,host=-1){
+Connect <- function(user=-1,pass=-1,host=-1){
     cat("\n    --- Connection to the database ---\n")
     if(user==-1){  cat("    User: ")  ;  user=readline()  }
     if(host==-1){  cat("    Host (leave empty for localhost): ")  ;  a=readline()  ;  if(a!="") host=a else host="localhost" }
@@ -27,7 +27,7 @@ Connect=function(user=-1,pass=-1,host=-1){
 #' @examples
 #' Disconnect()
 
-Disconnect=function(){
+Disconnect <- function(){
     RMySQL::dbDisconnect(AFPALdb)
     rm("AFPALdb")
 }

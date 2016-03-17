@@ -1,6 +1,6 @@
-#' Open a TRACE file
+#' Extract data from TRACE.
 #'
-#' Open a TRACE file.
+#' Extract data from TRACE.
 #' @param gridcells Coordinates of the pixels of interest (lon1, lat1, lon2, lat2, ...).
 #' @param var Variable of interest (TS/PRECC/PRECT/AI/MAP/MAT/PET/TSMN/TSMX/SOLIN).
 #' @param month A vector of values comprised between 1 and 12.
@@ -25,7 +25,7 @@ extractTRACE <- function(gridcells,var,month=1,decadal=TRUE,layer="",exportCSV=F
     }
     dat.in=list()
     for(i in 1:length(month)){
-        dat.in[[i]]=.openTRACE(var,month[i],decadal,layer)
+        dat.in[[i]]=openTRACE(var,month[i],decadal,layer)
     }
     dat.out=matrix(0,nrow=dim(dat.in[[1]])[3],ncol=length(month))
     for(p in 1:nrow(gridcells)){
