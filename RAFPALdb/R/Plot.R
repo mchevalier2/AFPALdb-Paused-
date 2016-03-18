@@ -9,7 +9,7 @@
 #' plotCountries(EXT=c(0,40,-40,0),add=FALSE)
 
 plotCountries <- function(EXT=c(-180,180,-90,90),add=FALSE){
-    M1=crop(readShapePoly("/Users/chevalier/ISEM/Scripts/QGIS/Shapefiles/World.shp"),EXT)
+    M1=raster::crop(maptools::readShapePoly("/Users/chevalier/ISEM/Scripts/QGIS/Shapefiles/World.shp"),EXT)
     plot(M1,add=add,lwd=0.3,border="grey40",asp=1)
 }
 
@@ -25,7 +25,7 @@ plotCountries <- function(EXT=c(-180,180,-90,90),add=FALSE){
 
 
 plotCountriesByName <- function(countries=c("South Africa"),add=FALSE){
-    M1=readShapePoly("/Users/chevalier/ISEM/Scripts/QGIS/Shapefiles/World.shp")
+    M1=maptools::readShapePoly("/Users/chevalier/ISEM/Scripts/QGIS/Shapefiles/World.shp")
     plot(M1[which(M1$CNTRY_NAME %in% countries),],add=add,lwd=0.3,border="grey40",asp=1)
 }
 

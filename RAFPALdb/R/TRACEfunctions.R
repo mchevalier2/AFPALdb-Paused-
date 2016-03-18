@@ -13,14 +13,14 @@
 openTRACE <- function(var,month=1,decadal=TRUE,layer=""){
     month=c("01.jan","02.feb","03.mar","04.apr","05.may","06.jun","07.jul","08.aug","09.sep","10.oct","11.nov","12.dec")[month]
     if(var %in% c("MAT","MAP","AI")) month=""
-    ncdf=nc_open(paste("/Users/chevalier/ISEM/Data/GCMs/TRACE21k/TRACE21Monthly/",var,ifelse(month=="","","."),month,ifelse(decadal,".10yrs.avg",""),".nc",sep=""))
+    ncdf=ncdf4::nc_open(paste("/Users/chevalier/ISEM/Data/GCMs/TRACE21k/TRACE21Monthly/",var,ifelse(month=="","","."),month,ifelse(decadal,".10yrs.avg",""),".nc",sep=""))
     if(!(layer %in% names(ncdf$var))){
-        if(length(names(ncdf$var))==1) return(ncvar_get(ncdf,names(ncdf$var)))
+        if(length(names(ncdf$var))==1) return(ncdf4::ncvar_get(ncdf,names(ncdf$var)))
         print(as.data.frame(names(ncdf$var)))
         a <- .readinteger(txt=paste("Which layer is being requested [",paste(1:length(names(ncdf$var)),collapse="/"),"]: ",sep=""),limit=length(names(ncdf$var)))
         layer=names(ncdf$var)[as.integer(a)]
     }
-    return(ncvar_get(ncdf,layer))
+    return(ncdf4::ncvar_get(ncdf,layer))
 }
 
 
