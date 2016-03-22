@@ -2,7 +2,7 @@
 #' #' 
 #'
 #' This function sends a request to the database and tests the result.
-#' @keywords unpackJSON
+#' @keywords JSON
 #' @export
 #' @examples
 #' .unpackJSON("")

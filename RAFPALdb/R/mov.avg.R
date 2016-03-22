@@ -1,7 +1,6 @@
 #' Performs a moving average. 
 #'
 #' This function performs a mpoving average.
-#' @keywords unpackJSON
 #' @export
 #' @examples
 #' .mov.avg(1:100)

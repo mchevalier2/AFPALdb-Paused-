@@ -37,5 +37,5 @@ Extract data from TRACE.
 plotTRACE(dat=openTRACE("TS",month=4,decadal=TRUE))
 }
 \keyword{Plot}
-\keyword{TRaCE,}
+\keyword{TRaCE}
 

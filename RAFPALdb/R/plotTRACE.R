@@ -11,7 +11,8 @@
 #' @param legend Position of the legend (top/right/bottom/left/none).
 #' @param EXT Extension of the plot( xmin, xmax, ymin, ymax).
 #' @param COL Color gradient.
-#' @keywords TRaCE, Plot
+#' @keywords Plot
+#' @keywords TRaCE
 #' @export
 #' @examples
 #' plotTRACE(dat=openTRACE("TS",month=4,decadal=TRUE))

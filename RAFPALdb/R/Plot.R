@@ -44,7 +44,6 @@ plotCountriesByName <- function(countries=c("South Africa"),add=FALSE){
 #' 
 
 makeTransparent <- function(color, alpha=0.5) {
-  #if(alpha<0 | alpha>1) stop("alpha must be between 0 and 1")
     if(alpha>1) alpha=1
     if(alpha<0) alpha=0
     alpha = floor(255*alpha)  

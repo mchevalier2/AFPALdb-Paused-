@@ -19,5 +19,5 @@ chrono1=getChronoFromDataID(49)
 chrono2=getChronoFromDataID(49,TRUE)
 }
 \keyword{Chronology}
-\keyword{Dataset,}
+\keyword{Dataset}
 

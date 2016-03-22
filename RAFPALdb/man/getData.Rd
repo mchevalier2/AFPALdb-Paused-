@@ -51,6 +51,6 @@ d3=getData(Citation_Key="Chase_etal_2013")
 d4=getData(Citation_Key="Chase_etal_2013",Record_Name="SWP-1-1",Proxy.Uncer=TRUE,Chrono.Uncer=TRUE)
 }
 \keyword{Chronology}
-\keyword{Dataset,}
+\keyword{Dataset}
 \keyword{getData}
 

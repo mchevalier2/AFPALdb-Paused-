@@ -1,8 +1,9 @@
 #' 
 #'
 #' This function allows you to get a password without echoing.
-#' @keywords txt
-#' @keywords limit
+#' @param txt
+#' @param limit
+#' @keywords prompt
 #' @export
 #' @examples
 
@@ -22,9 +23,9 @@
 
 #' 
 #'
-#' This function allows you to get a password without echoing.
-#' @keywords txt
-#' @keywords limit
+#' This function allows you to read Y/N answer.
+#' @param txt
+#' @keywords prompt
 #' @export
 #' @examples
 

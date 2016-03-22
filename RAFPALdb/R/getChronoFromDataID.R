@@ -3,7 +3,8 @@
 #' This function allows you to extract the chronology of a dataset identified by its ID.
 #' @param Dataset_ID ID of the dataset that needs its little chronology.
 #' @param Uncertainties Boolean value for the extraction of chronological uncertainties.
-#' @keywords Dataset, Chronology
+#' @keywords Dataset
+#' @keywords Chronology
 #' @export
 #' @examples
 #' chrono1=getChronoFromDataID(49)

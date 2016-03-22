@@ -6,7 +6,8 @@
 #' @param Citation_Key Reference associated to the dataset requested.
 #' @param Proxy Type of proxy of dataset requested.
 #' @param Dataset_ID ID of the requested dataset.
-#' @keywords Dataset, Chronology
+#' @keywords Dataset
+#' @keywords Chronology
 #' @export
 #' @examples
 #' d0=getData() # Returns NULL
