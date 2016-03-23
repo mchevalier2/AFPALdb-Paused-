@@ -5,12 +5,15 @@
 #' @param Record_Name Name of the specific record requested.
 #' @param Citation_Key Reference associated to the dataset requested.
 #' @param Proxy Type of proxy of dataset requested.
+#' @param Proxy.Uncer Boolean to indicate if uncertainties should be downloaded when available.
 #' @param Dataset_ID ID of the requested dataset.
+#' @param Chronology Boolean to indicate if achronology should be downloaded (default is TRUE).
+#' @param Chrono.Uncer Boolean to indicate if uncertainties should be downloaded when available.
 #' @keywords Dataset
 #' @keywords Chronology
 #' @export
 #' @examples
-#' d0=getData() # Returns NULL
+#' d0=getData()
 #' d1=getData(Site_Name="Seweweekspoort")
 #' d2=getData(Proxy="d13C")
 #' d3=getData(Citation_Key="Chase_etal_2013")

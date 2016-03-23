@@ -1,3 +1,33 @@
+#' Function to run all the Monte-Carlo interpolation and stacking process at once.
+#'
+#' Function to run all the Monte-Carlo interpolation and stacking process at once.
+#' @param sites List of sites to be used in the process.
+#' @param variable Variable of interest.
+#' @param time.range Minimum and maximum values of th period of interest. Does not necessary encompass the total temporal range of the records.
+#' @param time.resol Resolution of the record.
+#' @param NREP Number of scenarios to generate (default 50,000).
+#' @param Citation_Keys Number of scenarios to generate (default 50,000).
+#' @param remove A vector that contains the values necessary to run the 'removeSample()' function. Should be formatted as follow (n1,site1, n2,site2, n3,site3).
+#' @param ref String that indicates the sequence of reference. (Used for centring)
+#' @param overlap Vector that indicates for each site the period to consider for the overlap, e.g. c("site1",0,10000,"site2",3000,11000,"site3",350,8000). (Used for centring)
+#' @param exportData Boolean (default FALSE) to save the individual interpolations.
+#' @param saveData Folder where to save the outputs (in the working folder by default).
+#' @keywords Monte-Carlo
+#' @export
+#' @examples
+#' Pella = MonteCarlo(sites=c("PEL-1-1","PEL-1-4a"),variable="ReconAI",time.range=c(0,50000),time.resol=100,NREP=1000,Citation_Keys=c("Lim_etal_2016","Lim_etal_2016"),remove=c(21,"PEL-1-1"),ref="PEL-1-1",overlap=c("PEL-1-4a",100,1200),exportData=TRUE)
+
+MonteCarlo <- function(sites,variable,time.range,time.resol,NREP=50000,Citation_Keys=rep("",length(sites)),remove=NA,ref="",overlap=NA,exportData=FALSE,saveData=getwd()){
+    dat = Interpolation.init(sites,variable,time.range,time.resol,NREP,Citation_Keys)
+    for(i in seq(1,length(remove),2))  dat=removeSample(dat,n=as.numeric(remove[i]),site=remove[i+1])
+    dat = MonteCarloInterpolation(dat,exportData)
+    if(!is.na(ref))  dat = MonteCarloCentring(dat,ref,overlap)
+    dat = MonteCarloStacking(dat,exportData)
+    return(dat)
+}
+
+
+
 #' Function used to initiate the Monte-Carlo process. It will extract the data from FPALdb and group them into a Monte-Carlo object.
 #'
 #' Function used to initiate the Monte-Carlo process. It will extract the data from FPALdb and group them into a Monte-Carlo object.

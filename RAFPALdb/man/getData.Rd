@@ -21,7 +21,13 @@ getData(Site_Name = "", Record_Name = "", Citation_Key = "", Proxy = "",
 
 \item{Proxy}{Type of proxy of dataset requested.}
 
+\item{Proxy.Uncer}{Boolean to indicate if uncertainties should be downloaded when available.}
+
 \item{Dataset_ID}{ID of the requested dataset.}
+
+\item{Chronology}{Boolean to indicate if achronology should be downloaded (default is TRUE).}
+
+\item{Chrono.Uncer}{Boolean to indicate if uncertainties should be downloaded when available.}
 
 \item{Chrono_ID}{ID of the requested dataset.}
 
@@ -44,7 +50,7 @@ d1=getData(Site_Name="Seweweekspoort")
 d2=getData(Proxy="d13C")
 d3=getData(Citation_Key="Chase_etal_2013")
 d4=getData(Citation_Key="Chase_etal_2013",Record_Name="SWP-1-1")
-d0=getData() # Returns NULL
+d0=getData()
 d1=getData(Site_Name="Seweweekspoort")
 d2=getData(Proxy="d13C")
 d3=getData(Citation_Key="Chase_etal_2013")
