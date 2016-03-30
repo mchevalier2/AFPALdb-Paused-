@@ -101,7 +101,7 @@ openTRACE <- function(var,month=1,decadal=TRUE,layer=""){
 #' .getLonTRACE()
 
 .getLonTRACE <- function(center=FALSE){
-    return(seq(-180,179,resol)+ifelse(center,3.75/2,0))
+    return(seq(-180,179,3.75)+ifelse(center,3.75/2,0))
 }
 
 #' Get the list of latitudes of TRACE's grid cells.
@@ -114,5 +114,5 @@ openTRACE <- function(var,month=1,decadal=TRUE,layer=""){
 #' .getLatTRACE()
 
 .getLatTRACE <- function(center=FALSE){
-    return(seq(90,-86.25,-resol)-ifelse(center,3.75/2,0))
+    return(seq(90,-86.25,-3.75)-ifelse(center,3.75/2,0))
 }
