@@ -1,7 +1,7 @@
 #' Open a TRACE file
 #'
 #' Open a TRACE file.
-#' @param var Variable of interest (TS/PRECC/PRECT/AI/MAP/MAT/PET/TSMN/TSMX/SOLIN).
+#' @param var Variable of interest (TS/PRECC/PRECL/AI/MAP/MAT/PET/TSMN/TSMX/SOLIN).
 #' @param month A value between 1 and 12.
 #' @param decadal Boolean to select between annual (FALSE) or averaged by decade (TRUE, default) timeseries.
 #' @param layer The layer to extract from the netcdf file.
@@ -89,4 +89,30 @@ openTRACE <- function(var,month=1,decadal=TRUE,layer=""){
     XYmin=.cellFromXY(xmin,ymin)
     XYmax=.cellFromXY(xmax,ymax)
     return(dat[XYmax[2]:XYmin[2],XYmin[1]:XYmax[1]])
+}
+
+#' Get the list of longitudes of TRACE's grid cells.
+#'
+#' Get the list of longitudes of TRACE's grid cells.
+#' @param center Boolean to indicate whether the returned longitude should indicate the center of the grid cell (center=TRUE) or its topleft corner (center=FALSE, default).
+#' @keywords TRaCE
+#' @export
+#' @examples
+#' .getLonTRACE()
+
+.getLonTRACE <- function(center=FALSE){
+    return(seq(-180,179,resol)+ifelse(center,3.75/2,0))
+}
+
+#' Get the list of latitudes of TRACE's grid cells.
+#'
+#' Get the list of latitudes of TRACE's grid cells.
+#' @param center Boolean to indicate whether the returned latitude should indicate the center of the grid cell (center=TRUE) or its topleft corner (center=FALSE, default).
+#' @keywords TRaCE
+#' @export
+#' @examples
+#' .getLatTRACE()
+
+.getLatTRACE <- function(center=FALSE){
+    return(seq(90,-86.25,-resol)-ifelse(center,3.75/2,0))
 }

@@ -7,7 +7,7 @@
 openTRACE(var, month = 1, decadal = TRUE, layer = "")
 }
 \arguments{
-\item{var}{Variable of interest (TS/PRECC/PRECT/AI/MAP/MAT/PET/TSMN/TSMX/SOLIN).}
+\item{var}{Variable of interest (TS/PRECC/PRECL/AI/MAP/MAT/PET/TSMN/TSMX/SOLIN).}
 
 \item{month}{A value between 1 and 12.}
 

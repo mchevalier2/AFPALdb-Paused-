@@ -15,5 +15,6 @@ Imports:
     ncdf4,
     raster,
     ade4,
-    maptools
+    maptools,
+    rgeos
 

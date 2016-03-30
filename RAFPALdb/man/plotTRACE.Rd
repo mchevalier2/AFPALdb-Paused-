@@ -4,13 +4,17 @@
 \alias{plotTRACE}
 \title{Extract data from TRACE.}
 \usage{
-plotTRACE(dat, exportPDF = FALSE, savePDF = paste(getwd(), "/plotTRACE.pdf",
-  sep = ""), add.contours = TRUE, add.countries = TRUE, WIDTH = 5.51,
-  HEIGHT = 5.51, legend = "bottom", EXT = c(-180, 180, -90, 90),
-  COL = getColorGradient("Rd2Bl20"))
+plotTRACE(dat, year = 1, zlim = range(dat[, , year]), exportPDF = FALSE,
+  savePDF = paste(getwd(), "/plotTRACE.pdf", sep = ""), add.contours = TRUE,
+  add.countries = TRUE, WIDTH = 5.51, HEIGHT = 5.51, legend = "bottom",
+  EXT = c(-180, 180, -90, 90), COL = rev(getColorGradient("Rd2Bl20")))
 }
 \arguments{
 \item{dat}{Matrix to be plotted.}
+
+\item{year}{Year to plot. (1=22000 cal BP)}
+
+\item{zlim}{Range of values.}
 
 \item{exportPDF}{Boolean. TRUE to generate a pdf of the figure.}
 
@@ -26,15 +30,14 @@ plotTRACE(dat, exportPDF = FALSE, savePDF = paste(getwd(), "/plotTRACE.pdf",
 
 \item{EXT}{Extension of the plot( xmin, xmax, ymin, ymax).}
 
-\item{COL}{Color gradient.}
-
 \item{add.contries}{Boolean to add country borders on the figure.}
 }
 \description{
 Extract data from TRACE.
 }
 \examples{
-plotTRACE(dat=openTRACE("TS",month=4,decadal=TRUE))
+plotTRACE(dat=openTRACE("TS",month=1,decadal=TRUE),year=1,exportPDF=TRUE,EXT=c(-180,180,-90,90),legend='bottom')
+plotTRACE(dat=openTRACE("PRECC",month=8,decadal=TRUE),year=1,exportPDF=TRUE,EXT=c(-11.25,56.2,-37.5,41.2),legend='right')
 }
 \keyword{Plot}
 \keyword{TRaCE}
