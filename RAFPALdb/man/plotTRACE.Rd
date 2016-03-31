@@ -37,7 +37,7 @@ Extract data from TRACE.
 }
 \examples{
 plotTRACE(dat=openTRACE("TS",month=1,decadal=TRUE),year=1,exportPDF=TRUE,EXT=c(-180,180,-90,90),legend='bottom')
-plotTRACE(dat=openTRACE("PRECC",month=8,decadal=TRUE),year=1,exportPDF=TRUE,EXT=c(-11.25,56.2,-37.5,41.2),legend='right')
+plotTRACE(dat=openTRACE("PRECC",month=8,decadal=TRUE),year=1,exportPDF=TRUE,EXT=c(-11.25,56.2,-37.5,41.2),legend='right',COL=getColorGradient("Rainfall20"))
 }
 \keyword{Plot}
 \keyword{TRaCE}

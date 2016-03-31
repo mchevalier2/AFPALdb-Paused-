@@ -10,7 +10,7 @@
 
 plotCountries <- function(EXT=c(-180,180,-90,90),add=FALSE){
     M1=raster::crop(maptools::readShapePoly("/Users/chevalier/ISEM/Scripts/QGIS/Shapefiles/World.shp"),EXT)
-    if(require(rgeos))  plot(M1,add=add,lwd=0.3,border="grey40",asp=1)   
+    if(require(rgeos))  plot(M1,add=add,lwd=0.1,border="grey40",asp=1)   
 }
 
 #' Add countries to a plot.
@@ -26,7 +26,7 @@ plotCountries <- function(EXT=c(-180,180,-90,90),add=FALSE){
 
 plotCountriesByName <- function(countries=c("South Africa"),add=FALSE){
     M1=maptools::readShapePoly("/Users/chevalier/ISEM/Scripts/QGIS/Shapefiles/World.shp")
-    if(require(rgeos))  plot(M1[which(M1$CNTRY_NAME %in% countries),],add=add,lwd=0.3,border="grey40",asp=1)
+    if(require(rgeos))  plot(M1[which(M1$CNTRY_NAME %in% countries),],add=add,lwd=0.1,border="grey40",asp=1)
 }
 
 

@@ -17,7 +17,7 @@
 #' @export
 #' @examples
 #' plotTRACE(dat=openTRACE("TS",month=1,decadal=TRUE),year=1,exportPDF=TRUE,EXT=c(-180,180,-90,90),legend='bottom')
-#' plotTRACE(dat=openTRACE("PRECC",month=8,decadal=TRUE),year=1,exportPDF=TRUE,EXT=c(-11.25,56.2,-37.5,41.2),legend='right')
+#' plotTRACE(dat=openTRACE("PRECC",month=8,decadal=TRUE),year=1,exportPDF=TRUE,EXT=c(-11.25,56.2,-37.5,41.2),legend='right',COL=getColorGradient("Rainfall20"))
 
 
 plotTRACE <- function(dat,year=1,zlim=range(dat[,,year]),exportPDF=FALSE,savePDF=paste(getwd(),"/plotTRACE.pdf",sep=""),add.contours=TRUE,add.countries=TRUE,WIDTH=5.51,HEIGHT=5.51,legend='bottom',EXT=c(-180,180,-90,90),COL=rev(getColorGradient("Rd2Bl20"))){
